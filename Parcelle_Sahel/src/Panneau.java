@@ -5,18 +5,22 @@ import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
-import java.awt.geom.GeneralPath;
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.ListIterator;
 
 import javax.imageio.ImageIO;
 import javax.swing.JPanel;
 
 public class Panneau extends JPanel implements MouseListener{
 	
-	Parcelle[] parcelles;
-	GeneralPath path;
-	float[] dashParam = {20.0f, 20.0f};
+	private ArrayList<Parcelle> parcelles = new ArrayList<Parcelle>();
+	private Parcelle currentParcelle;
+	private static float[] dashParam = {20.0f, 20.0f};
+	private static BasicStroke pathStroke = new BasicStroke(10.0f, BasicStroke.CAP_ROUND, 
+				BasicStroke.JOIN_MITER, 10.0f,dashParam, 0.0f);
+	private BasicStroke circleStroke = new BasicStroke();
 	
 	public Panneau() {
 		super();
@@ -35,48 +39,54 @@ public class Panneau extends JPanel implements MouseListener{
 		}
 		
 		
-		g2d.setPaint(Color.green);
 		
-		g2d.setStroke(new BasicStroke(10.0f, BasicStroke.CAP_ROUND, 
-						BasicStroke.JOIN_MITER, 10.0f,dashParam, 0.0f));
-		if (path != null) 
-			g2d.draw(path);
-	}
-
-	public void mouseClicked(MouseEvent event) {
-		if (path == null) {
-			path = new GeneralPath();
-			path.moveTo(event.getX(), event.getY());
-		} else {
-			this.path.lineTo(event.getX(), event.getY());
-			this.repaint();
+		ListIterator<Parcelle> cur = parcelles.listIterator();
+			
+		while(cur.hasNext()){
+			Parcelle elem = cur.next();
+			elem.setColor(Color.cyan);
+			g2d.setPaint(elem.getColor());
+			g2d.setStroke(pathStroke);
+			g2d.draw(elem.getPath());
+			if (currentParcelle != null ) {
+				g2d.setPaint(Color.green);
+				g2d.setStroke(circleStroke);
+				g2d.draw(currentParcelle.getStartPoint().drawStartPoint(20));
+			}
 		}
 	}
+
+	public void mouseClicked(MouseEvent event) {}
 
 	public void mousePressed(MouseEvent event) {
-		if (path == null) {
-			path = new GeneralPath();
-			path.moveTo(event.getX(), event.getY());
-		} else {
-			this.path.lineTo(event.getX(), event.getY());
+		if (currentParcelle == null) {
+			currentParcelle = new Parcelle();
+			parcelles.add(currentParcelle);
+			
+			currentParcelle.setStartPoint(event.getX(), event.getY());
+			//currentParcelle.getStartPoint().addMouseListener(this);
 			this.repaint();
+		} else {
+			this.repaint();
+			
+			currentParcelle.checkEnd(event.getX(), event.getY());
+			if(currentParcelle.isEnded()) {
+				this.currentParcelle.drawFinalLine();
+				currentParcelle = null;	 
+			} else { 
+				this.currentParcelle.drawLineTo(event.getX(), event.getY());
+			}
 		}
 	}
 
 
-	public void mouseEntered(MouseEvent event) {
-		
-	}
+	public void mouseEntered(MouseEvent event) {}
 
 
-	public void mouseExited(MouseEvent arg0) {
-		
-	}
+	public void mouseExited(MouseEvent arg0) {}
 
 
 
 
-	public void mouseReleased(MouseEvent arg0) {
-		
-	}
+	public void mouseReleased(MouseEvent arg0) {}
 }
