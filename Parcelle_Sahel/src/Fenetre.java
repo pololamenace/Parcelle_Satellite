@@ -2,7 +2,7 @@ import javax.swing.JFrame;
 
 public class Fenetre extends JFrame{
 	
-	Panneau contentPan = new Panneau();
+	private Panneau contentPan = new Panneau();
 	
 	public Fenetre() {
 		this.setTitle("Default name");
@@ -13,6 +13,11 @@ public class Fenetre extends JFrame{
 		this.setContentPane(contentPan);
 		this.setVisible(true);
 	}
+
+	public Panneau getContentPan() {
+		return contentPan;
+	}
+	
 	
 	
 }
