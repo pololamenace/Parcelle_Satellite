@@ -7,6 +7,7 @@ import java.awt.event.MouseListener;
 
 public class StartPoint extends Point2D.Float implements MouseListener {
 	
+	
 	private Color pointColor; 
 	
 	public StartPoint() {}
@@ -19,13 +20,17 @@ public class StartPoint extends Point2D.Float implements MouseListener {
 		int x = (int) this.getX(), y = (int) this.getY();
 		return new Ellipse2D.Float(x - diam/2, y - diam/2,diam,diam);
 	}
+	
+	public Color getPointColor() {
+		return this.pointColor;
+	}
 
 	public void mouseClicked(MouseEvent arg0) {
 		
 	}
 
 	public void mouseEntered(MouseEvent arg0) {
-		
+		this.pointColor = Color.red;
 	}
 
 	public void mouseExited(MouseEvent arg0) {

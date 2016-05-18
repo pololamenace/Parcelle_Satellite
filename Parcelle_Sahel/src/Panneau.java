@@ -30,7 +30,7 @@ public class Panneau extends JPanel implements MouseListener{
 	
 	public void paintComponent(Graphics g){
 		Graphics2D g2d = (Graphics2D) g;
-		
+
 		try {
 			Image img = ImageIO.read(new File("./img/cool-wallpaper-1.jpg"));
 			g.drawImage(img, 0,0,this.getWidth(), this.getHeight(), this);
@@ -48,8 +48,9 @@ public class Panneau extends JPanel implements MouseListener{
 			g2d.setPaint(elem.getColor());
 			g2d.setStroke(pathStroke);
 			g2d.draw(elem.getPath());
+			
 			if (currentParcelle != null ) {
-				g2d.setPaint(Color.green);
+				g2d.setPaint(currentParcelle.getStartPoint().getPointColor());
 				g2d.setStroke(circleStroke);
 				g2d.draw(currentParcelle.getStartPoint().drawStartPoint(20));
 			}
@@ -64,7 +65,6 @@ public class Panneau extends JPanel implements MouseListener{
 			parcelles.add(currentParcelle);
 			
 			currentParcelle.setStartPoint(event.getX(), event.getY());
-			//currentParcelle.getStartPoint().addMouseListener(this);
 			this.repaint();
 		} else {
 			this.repaint();
@@ -72,7 +72,7 @@ public class Panneau extends JPanel implements MouseListener{
 			currentParcelle.checkEnd(event.getX(), event.getY());
 			if(currentParcelle.isEnded()) {
 				this.currentParcelle.drawFinalLine();
-				currentParcelle = null;	 
+				this.currentParcelle = null;	 
 			} else { 
 				this.currentParcelle.drawLineTo(event.getX(), event.getY());
 			}
