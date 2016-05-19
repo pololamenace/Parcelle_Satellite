@@ -26,13 +26,12 @@ public class Panneau extends JPanel implements MouseListener{
 		this.addMouseListener(this);
 	}
 	
-	
 	public void paintComponent(Graphics g){
 
 		Graphics2D g2d = (Graphics2D) g;
 
 		try {
-			Image img = ImageIO.read(new File("./img/cool-wallpaper-1.jpg"));
+			Image img = ImageIO.read(new File("./img/sahel.jpg"));
 			g.drawImage(img, 0,0,this.getWidth(), this.getHeight(), this);
 		} catch (IOException errImgIO) {
 			errImgIO.printStackTrace();

@@ -133,5 +133,7 @@ public class Parcelle implements MouseListener {
 	public String toString() {
 		return this.infos.toString();
 	}
+	
+	//blabla
 
 }
