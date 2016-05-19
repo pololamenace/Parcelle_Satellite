@@ -1,47 +1,65 @@
 import java.awt.Color;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseMotionListener;
 import java.awt.geom.Ellipse2D;
 import java.awt.geom.Point2D;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
 
 
-public class StartPoint extends Point2D.Float implements MouseListener {
+public class StartPoint extends Point2D.Float implements MouseMotionListener{
 	
+	private Ellipse2D pointShape;
+	private Ellipse2D overPointShape;
 	
-	private Color pointColor; 
+	private static int defaultPointDiam = 20;
+	private static int overPointDiam = 25;
+	private Color defaultPointColor = Color.green; 
+	private Color overPointColor = Color.cyan;
+	
+	private boolean over = false;
+	
+	private Parcelle attachedParcelle;
 	
 	public StartPoint() {}
 	
 	public StartPoint(int x, int y) {
 		super(x,y);
-	}
-	
-	public Ellipse2D drawStartPoint(int diam) {
-		int x = (int) this.getX(), y = (int) this.getY();
-		return new Ellipse2D.Float(x - diam/2, y - diam/2,diam,diam);
+		this.pointShape = new Ellipse2D.Float(x - defaultPointDiam/2, y - defaultPointDiam/2,defaultPointDiam,defaultPointDiam);
+		this.overPointShape = new Ellipse2D.Float(x - overPointDiam/2, y - overPointDiam/2,overPointDiam,overPointDiam);
 	}
 	
 	public Color getPointColor() {
-		return this.pointColor;
+		if(!this.over)
+			return this.defaultPointColor;
+		else
+			return this.overPointColor;
 	}
 
-	public void mouseClicked(MouseEvent arg0) {
-		
+	public Ellipse2D getPointShape() { 
+		if(!this.over)
+			return this.pointShape;
+		else
+			return this.overPointShape;
 	}
-
-	public void mouseEntered(MouseEvent arg0) {
-		this.pointColor = Color.red;
+	
+	public boolean getOver() {
+		return this.over;
 	}
-
-	public void mouseExited(MouseEvent arg0) {
-		
+	
+	public void setAttachedParcelle(Parcelle parc) {
+		this.attachedParcelle = parc;
 	}
+	
+	public void mouseDragged(MouseEvent arg0) {}
 
-	public void mousePressed(MouseEvent arg0) {
-		
-	}
-
-	public void mouseReleased(MouseEvent arg0) {
-		
+	public void mouseMoved(MouseEvent event) {
+		System.out.println("bra");
+		if (this.pointShape.contains(event.getX(), event.getY()) && !this.over) {
+				this.over = true;
+				this.attachedParcelle.getAttachedPan().repaint();
+		}
+		else if (!this.pointShape.contains(event.getX(), event.getY()) && this.over){
+				this.over = false;
+				this.attachedParcelle.getAttachedPan().repaint();
+		}
 	}
 }

@@ -3,6 +3,7 @@ import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Image;
+import java.awt.event.InputEvent;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.io.File;
@@ -17,9 +18,7 @@ public class Panneau extends JPanel implements MouseListener{
 	
 	private ArrayList<Parcelle> parcelles = new ArrayList<Parcelle>();
 	private Parcelle currentParcelle;
-	private static float[] dashParam = {20.0f, 20.0f};
-	private static BasicStroke pathStroke = new BasicStroke(10.0f, BasicStroke.CAP_ROUND, 
-				BasicStroke.JOIN_MITER, 10.0f,dashParam, 0.0f);
+	private StartPoint currentStartPoint;
 	private BasicStroke circleStroke = new BasicStroke();
 	
 	public Panneau() {
@@ -29,6 +28,7 @@ public class Panneau extends JPanel implements MouseListener{
 	
 	
 	public void paintComponent(Graphics g){
+
 		Graphics2D g2d = (Graphics2D) g;
 
 		try {
@@ -38,21 +38,28 @@ public class Panneau extends JPanel implements MouseListener{
 			errImgIO.printStackTrace();
 		}
 		
-		
-		
 		ListIterator<Parcelle> cur = parcelles.listIterator();
-			
+		
 		while(cur.hasNext()){
 			Parcelle elem = cur.next();
-			elem.setColor(Color.cyan);
+			elem.setColor(new Color(0,255,0,180));
 			g2d.setPaint(elem.getColor());
-			g2d.setStroke(pathStroke);
-			g2d.draw(elem.getPath());
+			g2d.setStroke(elem.getStroke());
+			if (elem.isSelected()) 
+				g2d.fill(elem.getPath());
+			else
+				g2d.draw(elem.getPath());
 			
-			if (currentParcelle != null ) {
-				g2d.setPaint(currentParcelle.getStartPoint().getPointColor());
-				g2d.setStroke(circleStroke);
-				g2d.draw(currentParcelle.getStartPoint().drawStartPoint(20));
+			g2d.draw(elem.getPath());
+		}
+		
+		if (currentParcelle != null ) {
+			g2d.setPaint(currentStartPoint.getPointColor());
+			g2d.setStroke(circleStroke);
+			if (currentStartPoint.getOver() == true) {
+				g2d.fill(currentStartPoint.getPointShape());
+			} else {
+				g2d.draw(currentStartPoint.getPointShape());
 			}
 		}
 	}
@@ -60,32 +67,45 @@ public class Panneau extends JPanel implements MouseListener{
 	public void mouseClicked(MouseEvent event) {}
 
 	public void mousePressed(MouseEvent event) {
-		if (currentParcelle == null) {
-			currentParcelle = new Parcelle();
-			parcelles.add(currentParcelle);
-			
-			currentParcelle.setStartPoint(event.getX(), event.getY());
-			this.repaint();
-		} else {
-			this.repaint();
-			
-			currentParcelle.checkEnd(event.getX(), event.getY());
-			if(currentParcelle.isEnded()) {
-				this.currentParcelle.drawFinalLine();
-				this.currentParcelle = null;	 
-			} else { 
-				this.currentParcelle.drawLineTo(event.getX(), event.getY());
+		switch(event.getModifiers()) {
+			case InputEvent.BUTTON1_MASK: {
+				if (currentParcelle == null) {
+					currentParcelle = new Parcelle();
+					currentParcelle.setAttachedPan(this);
+					this.addMouseListener(currentParcelle);
+					parcelles.add(currentParcelle);
+					currentParcelle.setStartPoint(event.getX(), event.getY());
+					currentStartPoint = currentParcelle.getStartPoint();
+					this.addMouseMotionListener(currentStartPoint);
+					this.repaint();
+				
+				} else {	
+					currentParcelle.checkEnd(event.getX(), event.getY());
+					if(currentParcelle.isEnded()) {
+						this.currentParcelle.drawFinalLine();
+						this.currentParcelle = null;	
+						this.removeMouseMotionListener(currentStartPoint);
+						this.currentStartPoint = null; 
+					} else { 
+						this.currentParcelle.drawLineTo(event.getX(), event.getY());
+					}
+				this.repaint();
+				}
+				break; 
 			}
-		}
+			case (InputEvent.BUTTON2_MASK): {
+				break; 
+			}
+			case (InputEvent.BUTTON3_MASK): {
+				break;
+			}	
+		} 
 	}
-
 
 	public void mouseEntered(MouseEvent event) {}
 
 
 	public void mouseExited(MouseEvent arg0) {}
-
-
 
 
 	public void mouseReleased(MouseEvent arg0) {}
