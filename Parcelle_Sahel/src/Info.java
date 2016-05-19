@@ -5,7 +5,9 @@ public class Info {
 	private String description = new String();
 	private Parcelle attachedParcelle; 
 	
-	public Info() {}
+	public Info(Parcelle parc) {
+		this.attachedParcelle = parc; 
+	}
 	
 	public Info(Parcelle parc, String pTitre, String pDescription) {
 		this.attachedParcelle = parc; 

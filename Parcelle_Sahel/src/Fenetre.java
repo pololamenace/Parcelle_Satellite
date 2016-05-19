@@ -2,21 +2,25 @@ import javax.swing.JFrame;
 
 public class Fenetre extends JFrame{
 	
-	private Panneau contentPan = new Panneau();
+	private Panneau contentPan;
 	
-	public Fenetre() {
+	public Fenetre(DisplayManager dm) {
+		
 		this.setTitle("Default name");
 		this.setLocationRelativeTo(null);
-		this.setSize(720,405); 
+		this.setExtendedState(this.getExtendedState() | this.MAXIMIZED_BOTH);
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		
+		contentPan = new Panneau(dm);
 		this.setContentPane(contentPan);
 		this.setVisible(true);
+		this.setResizable(false);
+
 	}
 
 	public Panneau getContentPan() {
 		return contentPan;
 	}
+	
 	
 	
 	

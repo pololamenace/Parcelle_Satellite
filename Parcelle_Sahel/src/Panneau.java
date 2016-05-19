@@ -20,10 +20,12 @@ public class Panneau extends JPanel implements MouseListener{
 	private Parcelle currentParcelle;
 	private StartPoint currentStartPoint;
 	private BasicStroke circleStroke = new BasicStroke();
+	private DisplayManager dm; 
 	
-	public Panneau() {
+	public Panneau(DisplayManager pdm) {
 		super();
 		this.addMouseListener(this);
+		dm = pdm;
 	}
 	
 	public void paintComponent(Graphics g){
@@ -52,7 +54,7 @@ public class Panneau extends JPanel implements MouseListener{
 			g2d.draw(elem.getPath());
 		}
 		
-		if (currentParcelle != null ) {
+		if (currentStartPoint != null ) {
 			g2d.setPaint(currentStartPoint.getPointColor());
 			g2d.setStroke(circleStroke);
 			if (currentStartPoint.getOver() == true) {
@@ -82,13 +84,15 @@ public class Panneau extends JPanel implements MouseListener{
 					currentParcelle.checkEnd(event.getX(), event.getY());
 					if(currentParcelle.isEnded()) {
 						this.currentParcelle.drawFinalLine();
-						this.currentParcelle = null;	
 						this.removeMouseMotionListener(currentStartPoint);
 						this.currentStartPoint = null; 
+						this.repaint();
+						dm.createDialogue(currentParcelle, "Please enter name for new parcel");
+						this.currentParcelle = null;	
 					} else { 
 						this.currentParcelle.drawLineTo(event.getX(), event.getY());
+						this.repaint();
 					}
-				this.repaint();
 				}
 				break; 
 			}

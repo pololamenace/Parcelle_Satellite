@@ -29,6 +29,7 @@ public class Parcelle implements MouseListener {
 	// Constructeur
 	public Parcelle() {
 		super();
+		infos = new Info(this) ;
 	}
 	/* ** ** ** ** */
 	
@@ -99,6 +100,7 @@ public class Parcelle implements MouseListener {
 	public void setAttachedPan(Panneau pan) {
 		this.attachedPan = pan;
 	}
+	
 	/* *** *** *** */
 	/* *** GET *** */
 	public StartPoint getStartPoint(){
@@ -128,12 +130,14 @@ public class Parcelle implements MouseListener {
 	public boolean isSelected() {
 		return this.selected;
 	}
-	/* *** *** *** */
 	
+	public Info getInfos() {
+		return this.infos;
+	}
+	/* *** *** *** */
 	public String toString() {
 		return this.infos.toString();
 	}
-	
 	//blabla
 
 }
