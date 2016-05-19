@@ -73,7 +73,6 @@ public class Panneau extends JPanel implements MouseListener{
 				if (currentParcelle == null) {
 					currentParcelle = new Parcelle();
 					currentParcelle.setAttachedPan(this);
-					this.addMouseListener(currentParcelle);
 					parcelles.add(currentParcelle);
 					currentParcelle.setStartPoint(event.getX(), event.getY());
 					currentStartPoint = currentParcelle.getStartPoint();
@@ -85,6 +84,7 @@ public class Panneau extends JPanel implements MouseListener{
 					if(currentParcelle.isEnded()) {
 						this.currentParcelle.drawFinalLine();
 						this.removeMouseMotionListener(currentStartPoint);
+						this.addMouseListener(currentParcelle);
 						this.currentStartPoint = null; 
 						this.repaint();
 						dm.createDialogue(currentParcelle, "Please enter name for new parcel");
