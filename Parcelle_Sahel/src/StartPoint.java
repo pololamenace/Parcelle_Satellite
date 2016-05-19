@@ -49,15 +49,30 @@ public class StartPoint extends Point2D.Float implements MouseMotionListener{
 		this.attachedParcelle = parc;
 	}
 	
+	public void setPointShape(Ellipse2D pointShape) {
+		this.pointShape = pointShape;
+	}
+
+	public void setDefaultPointColor(Color defaultPointColor) {
+		this.defaultPointColor = defaultPointColor;
+	}
+
+	public void setOverPointColor(Color overPointColor) {
+		this.overPointColor = overPointColor;
+	}
+
+	public void setOver(boolean over) {
+		this.over = over;
+	}
+
 	public void mouseDragged(MouseEvent arg0) {}
 
 	public void mouseMoved(MouseEvent event) {
-		System.out.println("bra");
 		if (this.pointShape.contains(event.getX(), event.getY()) && !this.over) {
 				this.over = true;
 				this.attachedParcelle.getAttachedPan().repaint();
 		}
-		else if (!this.pointShape.contains(event.getX(), event.getY()) && this.over){
+		else if (!this.overPointShape.contains(event.getX(), event.getY()) && this.over){
 				this.over = false;
 				this.attachedParcelle.getAttachedPan().repaint();
 		}

@@ -17,12 +17,14 @@ public class Parcelle implements MouseListener {
 	private BasicStroke pathStroke = new BasicStroke(defaultSize, BasicStroke.CAP_ROUND, 
 			BasicStroke.JOIN_MITER, 10.0f,defaultDashParam, 0.0f);
 
-	private static float distMax = 20f;
+	private static float distMax = 25f;
 	
 	private boolean ended = false;
 	private boolean selected = false; 
 	
 	private Panneau attachedPan;
+	
+	private Info infos; 
 	
 	// Constructeur
 	public Parcelle() {
@@ -41,6 +43,7 @@ public class Parcelle implements MouseListener {
 	
 	public void drawFinalLine() {
 		this.path.lineTo(this.startPoint.getX(), this.startPoint.getY());
+		this.startPoint = null;
 	}
 	
 	public boolean checkEnd(int posX, int posY) {
@@ -86,6 +89,7 @@ public class Parcelle implements MouseListener {
 		this.path.moveTo(posX, posY); 
 		this.startPoint = new StartPoint(posX, posY);
 		this.startPoint.setAttachedParcelle(this);
+		this.startPoint.setDefaultPointColor(this.colorParam);
 	}
 	
 	public void setColor(Color pColor) {
@@ -125,9 +129,9 @@ public class Parcelle implements MouseListener {
 		return this.selected;
 	}
 	/* *** *** *** */
+	
+	public String toString() {
+		return this.infos.toString();
+	}
 
-
-	
-	
-	
 }
