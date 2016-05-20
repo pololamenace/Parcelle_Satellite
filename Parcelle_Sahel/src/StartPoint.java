@@ -12,7 +12,7 @@ public class StartPoint extends Point2D.Float implements MouseMotionListener{
 	
 	private static int defaultPointDiam = 20;
 	private static int overPointDiam = 25;
-	private Color defaultPointColor = Color.green; 
+	private Color defaultPointColor; 
 	private Color overPointColor = Color.cyan;
 	
 	private boolean over = false;
@@ -47,6 +47,7 @@ public class StartPoint extends Point2D.Float implements MouseMotionListener{
 	
 	public void setAttachedParcelle(Parcelle parc) {
 		this.attachedParcelle = parc;
+		this.defaultPointColor = this.attachedParcelle.getColor();
 	}
 	
 	public void setPointShape(Ellipse2D pointShape) {

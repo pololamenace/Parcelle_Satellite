@@ -4,23 +4,27 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.event.InputEvent;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.ListIterator;
+import java.util.Random;
 
 import javax.imageio.ImageIO;
 import javax.swing.JPanel;
 
-public class Panneau extends JPanel implements MouseListener{
+public class Panneau extends JPanel implements MouseListener, KeyListener {
 	
 	private ArrayList<Parcelle> parcelles = new ArrayList<Parcelle>();
 	private Parcelle currentParcelle;
 	private StartPoint currentStartPoint;
 	private BasicStroke circleStroke = new BasicStroke();
 	private DisplayManager dm; 
+	private Random rand = new Random();
 	
 	public Panneau(DisplayManager pdm) {
 		super();
@@ -43,7 +47,6 @@ public class Panneau extends JPanel implements MouseListener{
 		
 		while(cur.hasNext()){
 			Parcelle elem = cur.next();
-			elem.setColor(new Color(0,255,0,180));
 			g2d.setPaint(elem.getColor());
 			g2d.setStroke(elem.getStroke());
 			if (elem.isSelected()) 
@@ -62,7 +65,7 @@ public class Panneau extends JPanel implements MouseListener{
 			} else {
 				g2d.draw(currentStartPoint.getPointShape());
 			}
-		}
+		} 
 	}
 
 	public void mouseClicked(MouseEvent event) {}
@@ -74,8 +77,14 @@ public class Panneau extends JPanel implements MouseListener{
 					currentParcelle = new Parcelle();
 					currentParcelle.setAttachedPan(this);
 					parcelles.add(currentParcelle);
+					currentParcelle.setColor(new Color(
+							(int) (Math.abs(this.rand.nextInt() / (float)Integer.MAX_VALUE) * 255), 
+							(int) (Math.abs(this.rand.nextInt() / (float)Integer.MAX_VALUE) * 255), 
+							(int) (Math.abs(this.rand.nextInt() / (float)Integer.MAX_VALUE) * 255), 
+							180));
 					currentParcelle.setStartPoint(event.getX(), event.getY());
 					currentStartPoint = currentParcelle.getStartPoint();
+					this.currentStartPoint.setAttachedParcelle(currentParcelle);
 					this.addMouseMotionListener(currentStartPoint);
 					this.repaint();
 				
@@ -100,6 +109,8 @@ public class Panneau extends JPanel implements MouseListener{
 				break; 
 			}
 			case (InputEvent.BUTTON3_MASK): {
+				System.out.println(parcelles.get(0));
+				
 				break;
 			}	
 		} 
@@ -112,4 +123,18 @@ public class Panneau extends JPanel implements MouseListener{
 
 
 	public void mouseReleased(MouseEvent arg0) {}
+
+	public void keyPressed(KeyEvent e) {
+		
+	}
+
+	public void keyReleased(KeyEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	public void keyTyped(KeyEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
 }

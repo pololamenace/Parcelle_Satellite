@@ -4,12 +4,14 @@ import java.awt.event.InputEvent;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.geom.GeneralPath;
+import java.util.Random;
 
 public class Parcelle implements MouseListener {
 	private GeneralPath path;
-	private StartPoint startPoint;
+	private Random rand = new Random(); 
 	private Color colorParam;
-	
+
+	private StartPoint startPoint;
 	private static float[] defaultDashParam = {10f,10f};
 	private static float defaultSize = 5.0f;
 	private static float[] selectedDashParam = {14f, 14f};
@@ -28,8 +30,9 @@ public class Parcelle implements MouseListener {
 	
 	// Constructeur
 	public Parcelle() {
-		super();
-		infos = new Info(this) ;
+		infos = new Info(this) ;		
+		System.out.println((int) (Math.abs(this.rand.nextInt() / (float)Integer.MAX_VALUE) * 255));
+
 	}
 	/* ** ** ** ** */
 	
@@ -65,7 +68,7 @@ public class Parcelle implements MouseListener {
 					this.selected = false;
 					this.pathStroke = new BasicStroke(defaultSize, BasicStroke.CAP_ROUND, 
 							BasicStroke.JOIN_MITER, 10.0f,defaultDashParam, 0.0f);
-				}
+				} 
 				this.attachedPan.repaint();
 			}
 		}
@@ -135,9 +138,29 @@ public class Parcelle implements MouseListener {
 		return this.infos;
 	}
 	/* *** *** *** */
-	public String toString() {
+/*	public String toString() {
 		return this.infos.toString();
+	}*/
+
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result
+				+ ((attachedPan == null) ? 0 : attachedPan.hashCode());
+		result = prime * result
+				+ ((colorParam == null) ? 0 : colorParam.hashCode());
+		result = prime * result + (ended ? 1231 : 1237);
+		result = prime * result + ((infos == null) ? 0 : infos.hashCode());
+		result = prime * result + ((path == null) ? 0 : path.hashCode());
+		result = prime * result
+				+ ((pathStroke == null) ? 0 : pathStroke.hashCode());
+		result = prime * result
+				+ ((startPoint == null) ? 0 : startPoint.hashCode());
+		return result;
 	}
-	//blabla
+
+	
 
 }

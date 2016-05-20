@@ -22,12 +22,14 @@ public class DialogueNom extends JDialog implements MouseListener,KeyListener{
 	protected static Font defFont = new Font("Arial", Font.PLAIN, 12);
 	protected static Parcelle parc = new Parcelle();
 	
-	public DialogueNom(JFrame parent, String title, Parcelle parc){
+	public DialogueNom(JFrame parent, String title, Parcelle pParc){
 		super(parent, title, true);
 		
 		this.setSize(400,50);
 		this.setLocationRelativeTo(null);
 		this.setResizable(false);
+		
+		parc = pParc;
 		
 		container.setBackground(Color.white);
 		container.setLayout(new BorderLayout());
@@ -41,21 +43,35 @@ public class DialogueNom extends JDialog implements MouseListener,KeyListener{
 		
 		btn.setPreferredSize(new Dimension(50,50));
 		btn.setFont(defFont);
+		btn.addMouseListener(this);
 		
 		container.add(desc, BorderLayout.WEST);
 		container.add(textbox, BorderLayout.CENTER);
 		container.add(btn, BorderLayout.EAST);
 		
+		
 		this.setContentPane(container);
 		this.setVisible(true);
+	}
+	
+	public void setVisible(boolean b) {
+		super.setVisible(b);
+		btn.addMouseListener(this);
+		textbox.addKeyListener(this);
+	}
+	
+	public void sendTextBox() {
+		parc.getInfos().setTitle(textbox.getText());
+		this.setVisible(false);
+		this.textbox.setText("");
+		this.textbox.removeKeyListener(this);
+		btn.removeMouseListener(this);
 	}
 
 	public void keyPressed(KeyEvent e){
 		if (e.getKeyCode() == 10){
-			this.parc.getInfos().setTitle(textbox.getText());
-			this.setVisible(false);
-			this.textbox.setText("");
-		}
+			this.sendTextBox();
+		} 
 	}
 
 	public void keyReleased(KeyEvent e) {
@@ -74,7 +90,6 @@ public class DialogueNom extends JDialog implements MouseListener,KeyListener{
 	}
 
 	public void mouseEntered(MouseEvent e) {
-		// TODO Auto-generated method stub
 		
 	}
 
@@ -84,8 +99,9 @@ public class DialogueNom extends JDialog implements MouseListener,KeyListener{
 	}
 
 	public void mousePressed(MouseEvent e) {
-		// TODO Auto-generated method stub
-		
+		if(e.getModifiers() == MouseEvent.BUTTON1_MASK) {
+			this.sendTextBox();
+		}
 	}
 
 	public void mouseReleased(MouseEvent e) {

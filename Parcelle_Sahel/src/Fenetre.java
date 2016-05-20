@@ -8,7 +8,7 @@ public class Fenetre extends JFrame{
 		
 		this.setTitle("Default name");
 		this.setLocationRelativeTo(null);
-		this.setExtendedState(this.getExtendedState() | this.MAXIMIZED_BOTH);
+		this.setExtendedState(this.getExtendedState() | MAXIMIZED_BOTH);
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		contentPan = new Panneau(dm);
 		this.setContentPane(contentPan);

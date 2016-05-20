@@ -19,8 +19,8 @@ public class Info {
 		return title;
 	}
 
-	public void setTitle(String title) {
-		this.title = title;
+	public void setTitle(String titre) {
+		this.title = titre;
 	}
 
 	public String getDescription() {
